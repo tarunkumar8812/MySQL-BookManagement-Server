@@ -1,5 +1,5 @@
 const express = require("express");
-const router = require("./src/routers/router.js")
+const router = require("./src/routes/route.js")
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
