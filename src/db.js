@@ -1,15 +1,12 @@
 const mysql = require("mysql2")
+require("dotenv").config()
 
 
 const pool = mysql.createPool({
     host: "127.0.0.1",
-
     user: 'root',
-    password: '',
-    database: 'mydb'
+    password: '881234',
+    database: 'assignment1'
 }).promise()
 
-const result = await pool.query(`
-SELECT * FROM product
-`)
-console.log(result);
+module.exports = pool
