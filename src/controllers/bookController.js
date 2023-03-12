@@ -50,7 +50,8 @@ const getAllBooks = async (req, res) => {
 const innerJoinData = async function (req, res) {
 
     const result = await pool.query(`
-        SELECT * FROM user
+        SELECT * 
+        FROM user
         LEFT JOIN books
         ON user.id = books.userId
     `)
