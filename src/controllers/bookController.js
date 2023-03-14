@@ -1,4 +1,4 @@
-const pool = require("../db.js")
+const pool = require("../admin/db.js")
 
 
 
@@ -57,7 +57,7 @@ const innerJoinData = async function (req, res) {
     `)
 
     console.table(result[0]);
-    
+
     return res.send({ status: true, count: result[0].length, data: result[0] })
 }
 
