@@ -17,10 +17,10 @@ app.use(
     }
 );
 
-
+// routes
+app.use("/admin/", router)
 app.use("/authors/", router)
 app.use("/users/", router)
-app.use("/admin/", router)
 
 
 

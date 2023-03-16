@@ -109,10 +109,7 @@ const createAuthors = async (req, res) => {
 }
 
 
-
-
 // -------------------------------- Author's Login API -------------------------------
-
 
 const authorLogin = async (req, res) => {
 
@@ -149,7 +146,6 @@ const authorLogin = async (req, res) => {
                 let token = JWT.sign(
                     {
                         authorId: authorInDataBase[0][0].authorId,
-                        isAdmin: authorInDataBase[0][0].isAdmin,
                         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // After 24 hour it will expire
                         iat: Math.floor(Date.now() / 1000),
                     },
@@ -157,11 +153,11 @@ const authorLogin = async (req, res) => {
                 );
 
 
-                let data = { token: token, authorId: authorInDataBase[0][0].authorId };
+                let data = { token: token, isAdmin: authorInDataBase[0][0].isAdmin, authorId: authorInDataBase[0][0].authorId };
 
                 return res
                     .status(200)
-                    .send({ status: true, message: "author login successfull", data: JSON.stringify(data), });
+                    .send({ status: true, message: "author login successfull", data: JSON.stringify(data) });
             }
         });
 
@@ -172,33 +168,87 @@ const authorLogin = async (req, res) => {
 
 
 
-const getUserById = async (req, res) => {
-    const result = await pool.query(` SELECT * FROM user where id = ${req.params.id}`)
-    console.log(result[0][0]);
-    return res.json({ msg: "hello world", data: result[0] })
+const getAuthorProfile = async (req, res) => {
+
+    try {
+
+        // authentication
+        // authorization
+
+        const authorId = req.params.authorId
+
+        const result = await pool.query(`
+            SELECT *
+            FROM authors
+            where authorId = "${authorId}"
+        `)
+
+        console.log(result[0][0]);
+        return res.status(200).json({ status: true, message: "Author's Profile", data: result[0][0] })
+
+    } catch (err) {
+        return res.status(500).send({ status: false, message: err.message });
+    }
 }
 
 
 
 
-const updateUser = async (req, res) => {
-    const result = await pool.query(`
-    UPDATE user
-    SET lname = true
-    WHERE id = 1;
-    `)
-    console.log(result[0]);
-    return res.json({ msg: "hello world", data: result[0] })
+const updateAuthor = async (req, res) => {
+    try {
+
+        // authentication
+        // authorization
+
+        let token = JSON.parse(JSON.parse(req.headers.token))
+
+        const data = Object.entries(req.body)
+
+
+        // email
+        // phone
+        // password
+        // profilePhoto
+
+
+
+        const result = await pool.query(`
+            UPDATE authors
+            SET ${data[0][0]} = "${data[0][1]}"
+            WHERE authorId = "${token.authorId}";
+        `)
+
+        return res
+            .status(200)
+            .json({ status: true, message: `${data[0][0]} updated successfully`, data: result[0] })
+    } catch (err) {
+        return res.status(500).send({ status: false, message: err.message });
+    }
 }
 
-const deleteUserById = async (req, res) => {
-    const result = await pool.query(`
-    DELETE 
-    FROM user 
-    WHERE id =${req.params.id};
-    `)
-    console.log(result[0]);
-    return res.json({ msg: "hello world", data: result[0] })
+
+
+
+const deleteAuthorById = async (req, res) => {
+    try {
+
+        // authentication
+        // authorization
+
+        let token = JSON.parse(JSON.parse(req.headers.token))
+
+        const result = await pool.query(`
+            UPDATE authors
+            SET isDeleted = 1
+            WHERE authorId = "${token.authorId}"
+        `)
+
+        return res
+            .status(200)
+            .json({ status: true, message: `deleted successfully` })
+    } catch (err) {
+        return res.status(500).send({ status: false, message: err.message });
+    }
 }
 
 
@@ -207,4 +257,4 @@ const deleteUserById = async (req, res) => {
 
 
 
-module.exports = { createAuthors, authorLogin, getUserById, updateUser, deleteUserById }
+module.exports = { createAuthors, authorLogin, getAuthorProfile, updateAuthor, deleteAuthorById }

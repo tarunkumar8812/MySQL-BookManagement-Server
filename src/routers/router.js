@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router()
 const { createTable, getAllAuthors } = require('../admin/adminController.js')
-const { getUserById, createAuthors, authorLogin, updateUser, deleteUserById } = require('../controllers/authorController.js')
+const { getAuthorProfile, createAuthors, authorLogin, updateAuthor, deleteAuthorById } = require('../controllers/authorController.js')
 const { createBooks, getAllBooks, innerJoinData } = require('../controllers/bookController.js')
 
 
@@ -11,17 +11,12 @@ router.get('/getAllAuthors', getAllAuthors)
 
 
 
-
-
 // Author APIs
 router.post('/createAuthors', createAuthors)
 router.post('/authorLogin', authorLogin)
-// router.get('/', getAllAuthors)
-router.get('/getUserById/:id', getUserById)
-router.put('/updateUser', updateUser)
-router.delete('/deleteUserById/:id', deleteUserById)
-
-
+router.get('/getAuthorProfile/:authorId', getAuthorProfile)
+router.put('/updateAuthor', updateAuthor)
+router.delete('/deleteAuthorById', deleteAuthorById)
 
 
 

@@ -25,17 +25,29 @@ const createTable = async (req, res) => {
         )
     `)
 
+    // console.log(result);
+    return res.status(201).json({ status: true, message: "authors Table created Successfully " })
+}
 
-    // CREATE TABLE book (
-    //     id int auto_increment,
-    //     name varchar(255) unique,
-    //     pages int,
-    //     author varchar(255),
-    //     primary key(id)
-    // )
+const createBookTable = async (req, res) => {
+    const result = await pool.query(`
+        CREATE TABLE books (
+            id int auto_increment NOT NULL primary key ,
+            bookId varchar(255) unique NOT NULL ,
+            title varchar(255) unique NOT NULL ,
+            pages int NOT NULL ,
+            price int NOT NULL , 
+            genre SET ()
+            isDeleted int DEFAULT 0 ,
+            bookPhoto varchar(255) ,
+            aId int NOT NULL,
+            FOREIGN KEY (aId) REFERENCES authors (id) ,
+            createdAt TIMESTAMP DEFAULT now() NOT NULL ,
+            updatedAt TIMESTAMP DEFAULT now() ON UPDATE now() NOT NULL 
+        )
+    `)
 
-
-    //     const result = await pool.query(`
+    // const result = await pool.query(`
     //     CREATE TABLE books (
     //         bookId int auto_increment primary key,
     //         title varchar(255) unique,
@@ -49,7 +61,9 @@ const createTable = async (req, res) => {
 
 
     // console.log(result);
-    return res.status(201).json({ status: true, message: "authors Table created Successfully " })
+    return res
+        .status(201)
+        .json({ status: true, message: "books Table created Successfully " })
 }
 
 
@@ -108,65 +122,4 @@ const dropTable = async (req, res) => {
 
 
 
-
-module.exports = { createTable,getAllAuthors,alterAuthorTable, dropTable }
-
-
-
-/*
-        {
-            "title": "Miss",
-            "fName": "Aarti",
-            "lName": "negi",
-            "email": "aarti@gmail.com",
-            "phone": "9851219315",
-            "password": "123",
-            "street": "Dakshin puri",
-            "city": "Delhi",
-            "pincode": 110032,
-        },
-        {
-            "title": "Mr",
-            "fName": "amar",
-            "lName": "singh",
-            "email": "amar@gmail.com",
-            "phone": "9858689315",
-            "password": "123",
-            "street": "Dakshin puri",
-            "city": "Delhi",
-            "pincode": 110032,
-        },
-        {
-            "title": "Mrs",
-            "fName": "suman",
-            "lName": "singh",
-            "email": "suman@gmail.com",
-            "phone": "9858619315",
-            "password": "123",
-            "street": "Dakshin puri",
-            "city": "Delhi",
-            "pincode": 110032,
-        },
-        {
-            "title": "Mrs",
-            "fName": "sufman",
-            "lName": "singh",
-            "email": "sumfan@gmail.com",
-            "phone": "985f8619315",
-            "password": "123",
-            "street": "Dakshin puri",
-            "city": "Delhi",
-            "pincode": 110032,
-        },
-        {
-            "title": "Mrs",
-            "fName": "sufman",
-            "lName": "singh",
-            "email": "sumffan@gmail.com",
-            "phone": "985f8f619315",
-            "password": "123",
-            "street": "Dakshin puri",
-            "city": "Delhi",
-            "pincode": 110032,
-        }
-*/
+module.exports = { createTable, getAllAuthors, alterAuthorTable, dropTable }
