@@ -18,6 +18,10 @@ app.use(
 );
 
 // routes
+app.use("/", (req, res) => {
+    return res.status(200).json({ message: "hello world", data: "result" })
+
+})
 app.use("/admin/", router)
 app.use("/authors/", router)
 app.use("/users/", router)
